@@ -1,9 +1,10 @@
 package gol;
 
-import org.w3c.dom.Attr;
-
-import javax.management.timer.Timer;
 import java.security.InvalidParameterException;
+
+// NOTE: Because IntelliJ is weird with ANSI escape sequences, need to run this in a standard terminal
+// I'm compiling the files then running:
+// java -classpath /Users/{user}/Code/GameOfLife/out/production/GameOfLife gol.Main <board size> <num of rounds>
 
 public class Main {
     private static class Attributes {

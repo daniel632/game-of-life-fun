@@ -19,8 +19,10 @@ public class ConsoleRenderer implements Renderer {
     public void render(List<List<Cell>> cells) {
         // (TODO - double check that this is an efficient way to handle strings?)
 
-        // TODO - figure out how to get game board printing / updating in the same position
-        String text = "\r\n\n";
+        System.out.print("\033[2J\033[;H");
+        System.out.flush();
+
+        String text = "\n\n";
         for (List<Cell> rowOfCells : cells) {
             String line = "";
             for (Cell cell : rowOfCells) {
@@ -31,7 +33,5 @@ public class ConsoleRenderer implements Renderer {
         }
         text += "\n";
         System.out.print(text);
-
-        System.out.flush();
     }
 }
