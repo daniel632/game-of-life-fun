@@ -15,26 +15,28 @@ public class Main {
     private static final int MAX_BOARD_SIZE = 100;
     private static final int MIN_BOARD_SIZE = 3;
     private static final int MAX_NUM_ROUNDS = 100;
+    private static final int DELAY = 250;
 
     public static void main(String[] args) {
         parseArgs(args);
 
         Board board = Board.newBoard(Attributes.boardSize, ConsoleRenderer.getRenderer());
-        board.display();
+        board.display(0);
 
         for (int roundNum = 1; roundNum < Attributes.numRounds; roundNum++) {
             // TODO Perhaps use a scheduled executor instead?
             try {
-                Thread.sleep(1000);
+                Thread.sleep(DELAY);
             } catch (InterruptedException e) {
                 // https://stackoverflow.com/questions/24104313/how-do-i-make-a-delay-in-java
                 Thread.currentThread().interrupt();
             }
 
             board = board.update();
-            board.display();
+            board.display(roundNum);
         }
 
+        board.end();
     }
 
     private static void parseArgs(String[] args) {

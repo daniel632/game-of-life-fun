@@ -16,14 +16,19 @@ public class Board {
     // TODO - implement Clone for the cells list?
         this.cells = cells;
         this.renderer = renderer;
+        this.renderer.initRenderer();
     }
 
     public static Board newBoard(int size, Renderer renderer) {
         return new Board(createStartCells(size), renderer);
     }
 
-    public void display() {
-        this.renderer.render(cells);
+    public void display(int roundNumber) {
+        this.renderer.render(cells, roundNumber);
+    }
+
+    public void end() {
+        this.renderer.closeRenderer();
     }
 
     // Construct a Board which represents the next state in the Game of Life algorithm
@@ -37,36 +42,45 @@ public class Board {
             List<Cell> newRowOfCells = new ArrayList<>(size);
 
             for (Cell cell : rowOfCells) {
-                // num of live neighbours
-                int numLiveNeighbours = 0;
-                for (Coordinate coord : cell.getNeighbourCoords()) {
-                    if (getCellAt(coord).getState() == 1) {
-                        numLiveNeighbours++;
-                    }
-                }
-                int newState = 0;
-                if (cell.getState() == 1) {
-                    if (numLiveNeighbours > 3) {
-                        // overpopulation
-                        newState = 0;
-                    } else if (numLiveNeighbours < 2) {
-                        // underpopulation
-                        newState = 0;
-                    } else {
-                        // lives on
-                        newState = 1;
-                    }
-                } else {
-                    if (numLiveNeighbours == 3) {
-                        newState = 1;
-                    }
-                }
-                newRowOfCells.add(Cell.newCell(newState, cell.getNeighbourCoords()));
+                newRowOfCells.add(Cell.newCell(getNewCellState(cell), cell.getNeighbourCoords()));
             }
             newCells.add(newRowOfCells);
         }
 
         return new Board(newCells, renderer);   // (renderer remains the same)
+    }
+
+    // TODO Implement with infinite board?
+    private int getNewCellState(Cell cell) {
+        int numLiveNeighbours = getNumberOfLiveNeighbours(cell);
+        int newState = 0;
+        if (cell.getState() == 1) {
+            if (numLiveNeighbours > 3) {
+                // overpopulation
+                newState = 0;
+            } else if (numLiveNeighbours < 2) {
+                // underpopulation
+                newState = 0;
+            } else {
+                // lives on
+                newState = 1;
+            }
+        } else {
+            if (numLiveNeighbours == 3) {
+                newState = 1;
+            }
+        }
+        return newState;
+    }
+
+    private int getNumberOfLiveNeighbours(Cell cell) {
+        int numLiveNeighbours = 0;
+        for (Coordinate coord : cell.getNeighbourCoords()) {
+            if (getCellAt(coord).getState() == 1) {
+                numLiveNeighbours++;
+            }
+        }
+        return numLiveNeighbours;
     }
 
     // Set all cells to have state == 0, besides central cell/s
