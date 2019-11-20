@@ -50,7 +50,6 @@ public class Board {
         return new Board(newCells, renderer);   // (renderer remains the same)
     }
 
-    // TODO Implement with infinite board?
     private int getNewCellState(Cell cell) {
         int numLiveNeighbours = getNumberOfLiveNeighbours(cell);
         int newState = 0;
@@ -94,7 +93,9 @@ public class Board {
             List<Cell> rowOfCells = new ArrayList<>(size);
 
             for (int col = 0; col < size; col++) {
-                // Set state randomly between 0 (dead) and 1 (alive), and set all neighbours to null for now
+                int state = 0;
+
+                // Set all neighbours to null for now
                 rowOfCells.add(col, Cell.newCell(random.nextInt(2), null));
             }
             newCells.add(row, rowOfCells);
@@ -149,46 +150,5 @@ public class Board {
             newCells.add(getCellAt(coord));
         }
         return newCells;
-    }
-
-
-
-
-
-
-    private void displayNumNeighbours() {
-        int size = this.cells.size();
-
-        System.out.println("Number of live neighbours: \n");
-
-        for (List<Cell> rowOfCells : this.cells) {
-            for (Cell cell : rowOfCells) {
-                int numLiveNeighbours = 0;
-                for (Coordinate coord : cell.getNeighbourCoords()) {
-                    if (getCellAt(coord).getState() == 1) {
-                        numLiveNeighbours++;
-                    }
-                }
-                System.out.print(numLiveNeighbours + " ");
-                int newState = 0;
-                if (cell.getState() == 1) {
-                    if (numLiveNeighbours > 3) {
-                        // overpopulation
-                        newState = 0;
-                    } else if (numLiveNeighbours < 2) {
-                        // underpopulation
-                        newState = 0;
-                    } else {
-                        // lives on
-                        newState = 1;
-                    }
-                } else {
-                    if (numLiveNeighbours == 3) {
-                        newState = 1;
-                    }
-                }
-            }
-        }
-        System.out.println();
     }
 }
