@@ -116,70 +116,26 @@ public class Board {
             for (int col = 0; col < size; col++) {
                 List<Coordinate> neighboursCoordList = null;
 
-                if (row == 0 && col == 0) {
-                    // top left
-                    neighboursCoordList = Arrays.asList(
-                        new Coordinate(1, 0), new Coordinate(1, 1), new Coordinate(0, 1)
-                    );
-                } else if (row == 0 && col == size - 1) {
-                    // top right
-                    neighboursCoordList = Arrays.asList(
-                        new Coordinate(col, 1), new Coordinate(col - 1, 1), new Coordinate(col - 1, 0)
-                    );
-                } else if (row == size - 1 && col == size - 1) {
-                    // bottom right
-                    neighboursCoordList = Arrays.asList(
-                        new Coordinate(col, row - 1), new Coordinate(col - 1, row),
-                        new Coordinate(col - 1, row - 1)
-                    );
-                } else if (row == size - 1 && col == 0) {
-                    // bottom left
-                    neighboursCoordList = Arrays.asList(
-                        new Coordinate(col, row - 1), new Coordinate(col + 1, row - 1),
-                        new Coordinate(col + 1, row)
-                    );
-                } else if (row == 0) {
-                    // top row
-                    neighboursCoordList = Arrays.asList(
-                            new Coordinate(col + 1, row), new Coordinate(col + 1, row + 1),
-                            new Coordinate(col, row + 1), new Coordinate(col - 1, row + 1),
-                            new Coordinate(col - 1, row)
-                    );
-                } else if (col == size - 1) {
-                    // right col
-                    neighboursCoordList = Arrays.asList(
-                        new Coordinate(col, row - 1), new Coordinate(col, row + 1),
-                        new Coordinate(col - 1, row + 1), new Coordinate(col - 1, row),
-                        new Coordinate(col - 1, row - 1)
-                    );
-                } else if (row == size - 1) {
-                    // bottom row
-                    neighboursCoordList = Arrays.asList(
-                        new Coordinate(col, row - 1), new Coordinate(col + 1, row - 1),
-                        new Coordinate(col + 1, row), new Coordinate(col - 1, row),
-                        new Coordinate(col - 1, row - 1)
-                    );
-                } else if (col == 0) {
-                    // left col
-                    neighboursCoordList = Arrays.asList(
-                            new Coordinate(col, row - 1), new Coordinate(col + 1, row - 1),
-                            new Coordinate(col + 1, row), new Coordinate(col + 1, row + 1),
-                            new Coordinate(col, row + 1)
-                    );
-                } else {
-                    // Non-edge coordinate
-                    neighboursCoordList = Arrays.asList(
-                        new Coordinate(col, row - 1), new Coordinate(col + 1, row - 1),
-                        new Coordinate(col + 1, row), new Coordinate(col + 1, row + 1),
-                        new Coordinate(col, row + 1), new Coordinate(col - 1, row + 1),
-                        new Coordinate(col - 1, row), new Coordinate(col - 1, row - 1)
-                    );
-                }
+                // Infinite board implementation - stitching the top with bottom and left with right
+                neighboursCoordList = Arrays.asList(
+                    new Coordinate(col, boundaryCalculation(row - 1, size)),
+                    new Coordinate(boundaryCalculation(col + 1, size), boundaryCalculation(row - 1, size)),
+                    new Coordinate(boundaryCalculation(col + 1, size), row),
+                    new Coordinate(boundaryCalculation(col + 1, size), boundaryCalculation(row + 1, size)),
+                    new Coordinate(col, boundaryCalculation(row + 1, size)),
+                    new Coordinate(boundaryCalculation(col - 1, size), boundaryCalculation(row + 1, size)),
+                    new Coordinate(boundaryCalculation(col - 1, size), row),
+                    new Coordinate(boundaryCalculation(col - 1, size), boundaryCalculation(row - 1, size))
+                );
 
                 // Updating the cell at (col, row) to have a list of neighbours
                 newCells.get(row).set(col, Cell.newCell(newCells.get(row).get(col).getState(), neighboursCoordList));
             }
         }
+    }
+
+    private static int boundaryCalculation(int index, int size) {
+        return (index + size) % size;
     }
 
     private Cell getCellAt(Coordinate coord) {

@@ -14,7 +14,7 @@ public class Main {
     }
     private static final int MAX_BOARD_SIZE = 100;
     private static final int MIN_BOARD_SIZE = 3;
-    private static final int MAX_NUM_ROUNDS = 100;
+    private static final int MAX_NUM_ROUNDS = 1000;
     private static final int DELAY = 250;
 
     public static void main(String[] args) {
