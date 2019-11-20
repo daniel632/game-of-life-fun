@@ -20,7 +20,7 @@ public class Main {
     public static void main(String[] args) {
         parseArgs(args);
 
-        Board board = Board.newBoard(Attributes.boardSize, ConsoleRenderer.getRenderer());
+        Board board = Board.newBoard(Attributes.boardSize, ConsoleRenderer.getRenderer(), StandardRule.newRule());
         board.display(0);
 
         for (int roundNum = 1; roundNum < Attributes.numRounds; roundNum++) {

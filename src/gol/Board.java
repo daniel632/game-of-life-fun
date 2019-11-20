@@ -3,24 +3,23 @@ package gol;
 import java.util.*;
 
 // Only have one of these per iteration (for immutably / thread safety)
-// TODO - (remove 2d array of cells) revamp so that each Cell has a Coord and so that the internal list is one dimensional
-// TODO (continued) - perhaps use a hashmap with key of Coordinate (then also modify hashCode and equals function for Coord)
-
 public class Board {
     private List<List<Cell>> cells;
     private Renderer renderer;
+    private Rule rule;
 
     // Immutable class to maximise thread-safety
     // Instead use the public static factory to create new instances
-    private Board(List<List<Cell>> cells, Renderer renderer) {
+    private Board(List<List<Cell>> cells, Renderer renderer, Rule rule) {
     // TODO - implement Clone for the cells list?
         this.cells = cells;
         this.renderer = renderer;
         this.renderer.initRenderer();
+        this.rule = rule;
     }
 
-    public static Board newBoard(int size, Renderer renderer) {
-        return new Board(createStartCells(size), renderer);
+    public static Board newBoard(int size, Renderer renderer, Rule rule) {
+        return new Board(createStartCells(size), renderer, rule);
     }
 
     public void display(int roundNumber) {
@@ -47,35 +46,18 @@ public class Board {
             newCells.add(newRowOfCells);
         }
 
-        return new Board(newCells, renderer);   // (renderer remains the same)
+        return new Board(newCells, this.renderer, this.rule);
     }
 
-    private int getNewCellState(Cell cell) {
-        int numLiveNeighbours = getNumberOfLiveNeighbours(cell);
-        int newState = 0;
-        if (cell.getState() == 1) {
-            if (numLiveNeighbours > 3) {
-                // overpopulation
-                newState = 0;
-            } else if (numLiveNeighbours < 2) {
-                // underpopulation
-                newState = 0;
-            } else {
-                // lives on
-                newState = 1;
-            }
-        } else {
-            if (numLiveNeighbours == 3) {
-                newState = 1;
-            }
-        }
-        return newState;
+    // TODO - cell should be able to know how many live neighbours it has - note this requires storing the Cell and not just Coordinate for each neighbour
+    private State getNewCellState(Cell cell) {
+        return this.rule.apply(cell, getNumberOfLiveNeighbours(cell));
     }
 
     private int getNumberOfLiveNeighbours(Cell cell) {
         int numLiveNeighbours = 0;
         for (Coordinate coord : cell.getNeighbourCoords()) {
-            if (getCellAt(coord).getState() == 1) {
+            if (getCellAt(coord).getState() == State.ALIVE) {
                 numLiveNeighbours++;
             }
         }
@@ -86,8 +68,6 @@ public class Board {
     private static List<List<Cell>> createStartCells(int size) {
         List<List<Cell>> newCells = new ArrayList<>(size);
 
-        Random random = new Random();
-
         // Creating a board of Cells of size (size x size)
         for (int row = 0; row < size; row++) {
             List<Cell> rowOfCells = new ArrayList<>(size);
@@ -96,7 +76,7 @@ public class Board {
                 int state = 0;
 
                 // Set all neighbours to null for now
-                rowOfCells.add(col, Cell.newCell(random.nextInt(2), null));
+                rowOfCells.add(col, Cell.newCell(State.randomState(), null));
             }
             newCells.add(row, rowOfCells);
         }
