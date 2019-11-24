@@ -14,7 +14,6 @@ public class Board {
     // TODO - implement Clone for the cells list?
         this.cells = cells;
         this.renderer = renderer;
-        this.renderer.initRenderer();
         this.rule = rule;
     }
 
@@ -24,10 +23,6 @@ public class Board {
 
     public void display(int roundNumber) {
         this.renderer.render(cells, roundNumber);
-    }
-
-    public void end() {
-        this.renderer.closeRenderer();
     }
 
     // Construct a Board which represents the next state in the Game of Life algorithm

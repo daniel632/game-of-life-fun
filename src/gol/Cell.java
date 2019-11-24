@@ -2,6 +2,8 @@ package gol;
 
 import java.util.List;
 
+// TODO - continuous state (i.e. fade to grey, etc), or more transitions
+
 // Immutable, which allows threading and other Cells to safely keep copies of other Cells
 public class Cell {
     private final State state;

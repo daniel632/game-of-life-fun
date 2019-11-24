@@ -21,7 +21,7 @@ public class ConsoleRenderer implements Renderer {
     }
 
     @Override
-    public void initRenderer() {
+    public void initRenderer(int size) {
     }
 
     @Override

@@ -20,23 +20,22 @@ public class Main {
     public static void main(String[] args) {
         parseArgs(args);
 
-        Board board = Board.newBoard(Attributes.boardSize, ConsoleRenderer.getRenderer(), StandardRule.newRule());
+        // TODO parse renderer type from args
+        Renderer renderer = GUIRenderer.getRenderer();
+        renderer.initRenderer(Attributes.boardSize);
+
+        Board board = Board.newBoard(Attributes.boardSize, renderer, StandardRule.newRule());
         board.display(0);
 
         for (int roundNum = 1; roundNum < Attributes.numRounds; roundNum++) {
             // TODO Perhaps use a scheduled executor instead?
-            try {
-                Thread.sleep(DELAY);
-            } catch (InterruptedException e) {
-                // https://stackoverflow.com/questions/24104313/how-do-i-make-a-delay-in-java
-                Thread.currentThread().interrupt();
-            }
-
+            // TODO implement concurrency (will enable higher fps)
+            golUtilities.sleep(DELAY);
             board = board.update();
             board.display(roundNum);
         }
 
-        board.end();
+        renderer.closeRenderer();
     }
 
     private static void parseArgs(String[] args) {
