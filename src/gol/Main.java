@@ -23,21 +23,22 @@ public class Main {
     private static final int MAX_BOARD_SIZE = 100;
     private static final int MIN_BOARD_SIZE = 3;
     private static final int MAX_NUM_ROUNDS = 1000;
-    private static final int DELAY = 100;
+    private static final int DELAY = 150;
 
     public static void main(String[] args) {
         parseArgs(args);
 
-        Renderer renderer = getRenderer(Attributes.rendererType);
+        Rule rule = StandardRule.newRule();
 
+        Renderer renderer = getRenderer(Attributes.rendererType);
         renderer.initRenderer(Attributes.boardSize);
 
-        Board board = Board.newBoard(Attributes.boardSize, renderer, StandardRule.newRule());
+        Board board = Board.newBoard(Attributes.boardSize, renderer, rule);
         board.display(0);
 
         for (int roundNum = 1; roundNum < Attributes.numRounds; roundNum++) {
             // TODO Perhaps use a scheduled executor instead?
-            // TODO implement concurrency (will enable higher fps)
+            // TODO implement concurrency (will enable higher fps) - for update only (not display)
             golUtilities.sleep(DELAY);
             board = board.update();
             board.display(roundNum);

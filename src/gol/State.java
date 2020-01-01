@@ -1,20 +1,25 @@
 package gol;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public enum State {
-    DEAD,
-    ALIVE;
+    DEAD(Color.GRAY),
+    ALIVE(Color.GREEN),
+    ALIVE2(Color.BLUE);
 
     private static final List<State> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
-    private static final Random RANDOM = new Random();
+    private Color color;
 
-    public static State randomState()  {
-        return VALUES.get(RANDOM.nextInt(SIZE));
+    State(Color color) {
+        this.color = color;
+    }
+
+    public Color getColor() {
+        return this.color;
     }
 
     @Override

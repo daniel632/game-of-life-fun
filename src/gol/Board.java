@@ -1,6 +1,7 @@
 package gol;
 
 import java.util.*;
+import java.util.List;
 
 // Only have one of these per iteration (for immutably / thread safety)
 public class Board {
@@ -18,7 +19,7 @@ public class Board {
     }
 
     public static Board newBoard(int size, Renderer renderer, Rule rule) {
-        return new Board(createStartCells(size), renderer, rule);
+        return new Board(createStartCells(size, rule), renderer, rule);
     }
 
     public void display(int roundNumber) {
@@ -60,7 +61,7 @@ public class Board {
     }
 
     // Set all cells to have state == 0, besides central cell/s
-    private static List<List<Cell>> createStartCells(int size) {
+    private static List<List<Cell>> createStartCells(int size, Rule rule) {
         List<List<Cell>> newCells = new ArrayList<>(size);
 
         // Creating a board of Cells of size (size x size)
@@ -71,7 +72,7 @@ public class Board {
                 int state = 0;
 
                 // Set all neighbours to null for now
-                rowOfCells.add(col, Cell.newCell(State.randomState(), null));
+                rowOfCells.add(col, Cell.newCell(rule.getRandomState(), null));
             }
             newCells.add(row, rowOfCells);
         }

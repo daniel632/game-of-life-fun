@@ -88,11 +88,7 @@ public class GUIRenderer implements Renderer {
         for (int row = 0; row < this.boardSideLength; row++) {
             for (int col = 0; col < this.boardSideLength; col++) {
                 Cell cell = cells.get(row).get(col);
-                if (cell.getState() == State.ALIVE) {
-                    this.cellPanels.get(row).get(col).setBackground(Color.GREEN);
-                } else {
-                    this.cellPanels.get(row).get(col).setBackground(Color.GRAY);
-                }
+                this.cellPanels.get(row).get(col).setBackground(cell.getState().getColor());
             }
         }
     }

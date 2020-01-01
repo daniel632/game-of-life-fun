@@ -39,11 +39,12 @@ public class ConsoleRenderer implements Renderer {
         for (List<Cell> rowOfCells : cells) {
             String line = "";
             for (Cell cell : rowOfCells) {
-                if (cell.getState() == State.ALIVE) {
-                    line += ANSI_GREEN_BACKGROUND + "   " + ANSI_RESET;
-                } else {
-                    line += "   ";
-                }
+                // TODO convert java.awt.color to ansi / hex
+//                if (cell.getState() == State.ALIVE) {
+//                    line += ANSI_GREEN_BACKGROUND + "   " + ANSI_RESET;
+//                } else {
+//                    line += "   ";
+//                }
             }
             line += "\n";
             text += line;
