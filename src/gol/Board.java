@@ -2,6 +2,7 @@ package gol;
 
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 // Only have one of these per iteration (for immutably / thread safety)
 public class Board {
@@ -47,17 +48,11 @@ public class Board {
 
     // TODO - cell should be able to know how many live neighbours it has - note this requires storing the Cell and not just Coordinate for each neighbour
     private State getNewCellState(Cell cell) {
-        return this.rule.apply(cell, getNumberOfLiveNeighbours(cell));
+        return this.rule.apply(cell, getNeighbourCells(cell));
     }
 
-    private int getNumberOfLiveNeighbours(Cell cell) {
-        int numLiveNeighbours = 0;
-        for (Coordinate coord : cell.getNeighbourCoords()) {
-            if (getCellAt(coord).getState() == State.ALIVE) {
-                numLiveNeighbours++;
-            }
-        }
-        return numLiveNeighbours;
+    private List<Cell> getNeighbourCells(Cell cell) {
+        return cell.getNeighbourCoords().stream().map(coord -> getCellAt(coord)).collect(Collectors.toList());
     }
 
     // Set all cells to have state == 0, besides central cell/s
